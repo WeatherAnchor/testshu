@@ -3,7 +3,6 @@ from pydantic import BaseModel
 from typing import Optional
 from fastapi import FastAPI, HTTPException
 from typing import List
-from database import supabase
 import os
 
 # Access environment variables
