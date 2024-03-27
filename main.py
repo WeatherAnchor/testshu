@@ -16,6 +16,7 @@ if not supabase_url or not supabase_key:
 supabase: Client = create_client(supabase_url, supabase_key)
 
 class ChocolateBar(BaseModel):
+    id: Optional[int] = None
     company: Optional[str] = None
     specific_bean_origin_or_bar_name: Optional[str] = None
     ref: Optional[int] = None
