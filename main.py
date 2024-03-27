@@ -34,28 +34,33 @@ app = FastAPI()
 def create_chocolate_bar(chocolate_bar: ChocolateBar):
     data = chocolate_bar.dict(exclude_unset=True)
     inserted_data = supabase.table("chocolate_bars").insert(data).execute()
-    if inserted_data.error:
+    if inserted_data.data:
+        return inserted_data.data
+    else:
         raise HTTPException(status_code=400, detail="Error inserting data")
-    return inserted_data.data[0]
 
 @app.get("/chocolate_bars/", response_model=List[ChocolateBar])
 def read_chocolate_bars():
     data = supabase.table("chocolate_bars").select("*").execute()
-    if data.error:
+    if data.data:
+        return data.data
+    else:
         raise HTTPException(status_code=400, detail="Error reading data")
-    return data.data
+    
 
 @app.put("/chocolate_bars/{chocolate_bar_id}", response_model=ChocolateBar)
 def update_chocolate_bar(chocolate_bar_id: int, chocolate_bar: ChocolateBar):
     data = chocolate_bar.dict(exclude_unset=True)
     updated_data = supabase.table("chocolate_bars").update(data).eq("id", chocolate_bar_id).execute()
-    if updated_data.error:
+    if updated_data.data:
+        return updated_data.data
+    else:
         raise HTTPException(status_code=400, detail="Error updating data")
-    return updated_data.data[0]
 
 @app.delete("/chocolate_bars/{chocolate_bar_id}", response_model=dict)
 def delete_chocolate_bar(chocolate_bar_id: int):
     deleted_data = supabase.table("chocolate_bars").delete().eq("id", chocolate_bar_id).execute()
-    if deleted_data.error:
+    if deleted_data.data:
+        return deleted_data.data
+    else:
         raise HTTPException(status_code=400, detail="Error deleting data")
-    return {"message": "Chocolate bar deleted successfully."}
